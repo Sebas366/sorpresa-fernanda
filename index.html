@@ -6,9 +6,10 @@
 <title>Para Fernanda ❤️</title>
 
 <style>
+
 body{
     margin:0;
-    height:100vh;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -16,7 +17,7 @@ body{
     background: linear-gradient(-45deg,#ff9a9e,#fecfef,#fad0c4,#ffd1ff);
     background-size:400% 400%;
     animation:fondo 12s ease infinite;
-    overflow:hidden;
+    overflow-x:hidden;
 }
 
 @keyframes fondo{
@@ -33,7 +34,7 @@ body{
     box-shadow:0 15px 35px rgba(0,0,0,0.25);
     text-align:center;
     width:90%;
-    max-width:380px;
+    max-width:420px;
     position:relative;
 }
 
@@ -92,11 +93,30 @@ button{
     margin-top:15px;
     background:#fff0f4;
     color:#ff4d6d;
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
     padding:10px;
     border-radius:15px;
     display:none;
+}
+
+/* GALERIA */
+.galeria{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.galeria img{
+    width:100%;
+    border-radius:12px;
+    box-shadow:0 5px 12px rgba(0,0,0,0.2);
+    transition:.3s;
+}
+
+.galeria img:hover{
+    transform:scale(1.05);
 }
 
 /* mensaje final */
@@ -112,10 +132,8 @@ button{
     to{opacity:1; transform:scale(1);}
 }
 
-/* corazones */
 .corazon{
     position:absolute;
-    color:white;
     animation:flotar 6s linear infinite;
 }
 
@@ -123,23 +141,79 @@ button{
     from{transform:translateY(100vh);opacity:1;}
     to{transform:translateY(-10vh);opacity:0;}
 }
-/* brillo final */
+
 .brillo{
     animation:brilloFinal 1s ease;
 }
 
 @keyframes brilloFinal{
-    0%{box-shadow:0 0 0 rgba(255,77,109,0);}
     50%{box-shadow:0 0 40px rgba(255,77,109,0.8);}
-    100%{box-shadow:0 15px 35px rgba(0,0,0,0.25);}
 }
+
 #teQuiero{
     margin-top:15px;
     font-size:30px;
     font-weight:bold;
     color:#ff4d6d;
-    letter-spacing:2px;
-    min-height:35px;
+}
+/* CONTENEDOR FOTOS */
+.fotos{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+/* estilo fotos */
+.foto{
+    position:absolute;
+    width:90px;
+    border-radius:15px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.25);
+    animation:flotarFoto 6s ease-in-out infinite;
+}
+
+/* animación suave */
+@keyframes flotarFoto{
+    0%,100%{transform:translateY(0px) rotate(-2deg);}
+    50%{transform:translateY(-15px) rotate(2deg);}
+}
+
+/* POSICIONES */
+.f1{ top:5%; left:5%; }
+.f2{ top:15%; right:8%; }
+.f3{ top:55%; left:3%; }
+.f4{ top:70%; right:5%; }
+.f5{ top:30%; left:12%; }
+.f6{ top:40%; right:12%; }
+.f7{ top:80%; left:20%; }
+.f8{ top:85%; right:20%; }
+
+/* tarjeta encima */
+.tarjeta{
+    position:relative;
+    z-index:2;
+}
+
+/* animación final fotos */
+.fotos.activo .foto{
+    animation:acercarse 1.5s ease forwards;
+}
+
+@keyframes acercarse{
+    0%{
+        transform:scale(1) rotate(0deg);
+        opacity:1;
+    }
+    100%{
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%) scale(1.3);
+        box-shadow:0 0 25px rgba(255,77,109,0.8);
+    }
 }
 
 </style>
@@ -151,6 +225,21 @@ button{
 <source src="https://drive.google.com/uc?export=download&id=1jVipZxvFBI7LfzibjqkIdlIN4W02j3JJ" type="audio/mpeg">
 </audio>
 
+<audio id="pop">
+    <source src="pop.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Fotos flotantes -->
+<div class="fotos">
+  <img src="foto1.jpg" class="foto f1">
+  <img src="foto2.jpg" class="foto f2">
+  <img src="foto3.jpg" class="foto f3">
+  <img src="foto4.jpg" class="foto f4">
+  <img src="foto5.jpg" class="foto f5">
+  <img src="foto6.jpg" class="foto f6">
+  <img src="foto7.jpg" class="foto f7">
+  <img src="foto8.jpg" class="foto f8">
+</div>
 
 <div class="tarjeta">
 
@@ -168,20 +257,20 @@ Tengo una pregunta muy importante…<br><br>
 
 <div id="mensajeNo"></div>
 
+
 <div id="mensajeFinal">
 ✨ Sabía que dirías que sí ✨<br><br>
 Gracias por hacer mi mundo más bonito incluso a la distancia ❤️🌎
-<br><br>
 <div id="teQuiero"></div>
-
 </div>
 
 </div>
 
 <script>
-const botonNo = document.getElementById("no");
-const botonSi = document.getElementById("si");
-const mensajeNo = document.getElementById("mensajeNo");
+
+const botonNo=document.getElementById("no");
+const botonSi=document.getElementById("si");
+const mensajeNo=document.getElementById("mensajeNo");
 
 const frases=[
 "¿Segura? 😳",
@@ -194,7 +283,20 @@ const frases=[
 
 let contador=0;
 
-/* botón escapista */
+function subirVolumen(){
+    const musica = document.getElementById("musica");
+    let volumen = musica.volume;
+
+    const intervalo = setInterval(()=>{
+        if(volumen < 1){
+            volumen += 0.05;
+            musica.volume = volumen;
+        }else{
+            clearInterval(intervalo);
+        }
+    },120);
+}
+
 function moverBoton(){
     botonNo.style.transform=
         `translate(${Math.random()*120-60}px,
@@ -208,8 +310,12 @@ function moverBoton(){
 botonNo.addEventListener("mouseover", moverBoton);
 botonNo.addEventListener("touchstart", moverBoton);
 
-/* aceptar */
 botonSi.addEventListener("click",()=>{
+
+    document.querySelector(".fotos").classList.add("activo");
+
+    document.getElementById("pop").play();
+    subirVolumen();
 
     document.querySelector(".tarjeta").classList.add("brillo");
     lluviaFinal();
@@ -226,8 +332,6 @@ botonSi.addEventListener("click",()=>{
     },800);
 });
 
-
-/* corazones */
 setInterval(()=>{
     const c=document.createElement("div");
     c.className="corazon";
@@ -238,7 +342,6 @@ setInterval(()=>{
     setTimeout(()=>c.remove(),6000);
 },400);
 
-/* lluvia intensa final */
 function lluviaFinal(){
     for(let i=0;i<80;i++){
         setTimeout(()=>{
@@ -262,13 +365,12 @@ function lluviaFinal(){
 }
 
 function escribirTexto(texto){
-    const elemento = document.getElementById("teQuiero");
+    const elemento=document.getElementById("teQuiero");
     elemento.innerHTML="";
     let i=0;
-
     function escribir(){
-        if(i < texto.length){
-            elemento.innerHTML += texto.charAt(i);
+        if(i<texto.length){
+            elemento.innerHTML+=texto.charAt(i);
             i++;
             setTimeout(escribir,90);
         }
@@ -276,10 +378,24 @@ function escribirTexto(texto){
     escribir();
 }
 
-/* activar música móvil */
+let sonidoIniciado = false;
+
 document.body.addEventListener("click",()=>{
-document.getElementById("musica").play();
+    if(!sonidoIniciado){
+
+        const musica = document.getElementById("musica");
+        const pop = document.getElementById("pop");
+
+        musica.volume = 0.4; // empieza suave
+        musica.play();
+
+        pop.volume = 0.6;
+        pop.play(); // sonido mágico al abrir
+
+        sonidoIniciado = true;
+    }
 });
+
 </script>
 
 </body>
