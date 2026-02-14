@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Fernanda ❤️</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg,#ff9a9e,#fecfef,#fad0c4,#ffd1ff);
+    background-size:400% 400%;
+    animation:fondo 12s ease infinite;
+    overflow:hidden;
+}
+
+@keyframes fondo{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* TARJETA */
+.tarjeta{
+    background:white;
+    padding:35px 25px;
+    border-radius:25px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+    text-align:center;
+    width:90%;
+    max-width:380px;
+    position:relative;
+}
+
+/* nombre */
+.nombre{
+    font-size:36px;
+    color:#ff4d6d;
+    animation:latido 1.5s infinite;
+}
+
+@keyframes latido{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+}
+
+h1{
+    color:#ff4d6d;
+    font-size:24px;
+}
+
+/* botones */
+.botones{
+    margin-top:25px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+button{
+    padding:14px 24px;
+    font-size:18px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    transition:0.25s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+#si{
+    background:#ff4d6d;
+    color:white;
+}
+
+#si:hover{
+    transform:scale(1.1);
+}
+
+#no{
+    background:#555;
+    color:white;
+    position:relative;
+}
+
+/* mensajes NO */
+#mensajeNo{
+    margin-top:15px;
+    background:#fff0f4;
+    color:#ff4d6d;
+    font-size:22px;
+    font-weight:bold;
+    padding:10px;
+    border-radius:15px;
+    display:none;
+}
+
+/* mensaje final */
+#mensajeFinal{
+    display:none;
+    font-size:24px;
+    color:#ff4d6d;
+    animation:aparecer 1s ease;
+}
+
+@keyframes aparecer{
+    from{opacity:0; transform:scale(0.7);}
+    to{opacity:1; transform:scale(1);}
+}
+
+/* corazones */
+.corazon{
+    position:absolute;
+    color:white;
+    animation:flotar 6s linear infinite;
+}
+
+@keyframes flotar{
+    from{transform:translateY(100vh);opacity:1;}
+    to{transform:translateY(-10vh);opacity:0;}
+}
+/* brillo final */
+.brillo{
+    animation:brilloFinal 1s ease;
+}
+
+@keyframes brilloFinal{
+    0%{box-shadow:0 0 0 rgba(255,77,109,0);}
+    50%{box-shadow:0 0 40px rgba(255,77,109,0.8);}
+    100%{box-shadow:0 15px 35px rgba(0,0,0,0.25);}
+}
+#teQuiero{
+    margin-top:15px;
+    font-size:30px;
+    font-weight:bold;
+    color:#ff4d6d;
+    letter-spacing:2px;
+    min-height:35px;
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="musica" autoplay loop>
+<source src="https://drive.google.com/uc?export=download&id=1jVipZxvFBI7LfzibjqkIdlIN4W02j3JJ" type="audio/mpeg">
+</audio>
+
+
+<div class="tarjeta">
+
+<div class="nombre">Fernanda ❤️</div>
+
+<h1 id="pregunta">
+Tengo una pregunta muy importante…<br><br>
+¿Quieres ser mi San Valentín? 💌
+</h1>
+
+<div class="botones">
+<button id="si">Sí 💖</button>
+<button id="no">No 😜</button>
+</div>
+
+<div id="mensajeNo"></div>
+
+<div id="mensajeFinal">
+✨ Sabía que dirías que sí ✨<br><br>
+Gracias por hacer mi mundo más bonito incluso a la distancia ❤️🌎
+<br><br>
+<div id="teQuiero"></div>
+
+</div>
+
+</div>
+
+<script>
+const botonNo = document.getElementById("no");
+const botonSi = document.getElementById("si");
+const mensajeNo = document.getElementById("mensajeNo");
+
+const frases=[
+"¿Segura? 😳",
+"Creo que te equivocaste 🤨",
+"Ese botón no coopera 😌",
+"Intentemos otra vez 😂",
+"El destino dice que sí 👀",
+"Solo queda una opción 💖"
+];
+
+let contador=0;
+
+/* botón escapista */
+function moverBoton(){
+    botonNo.style.transform=
+        `translate(${Math.random()*120-60}px,
+                   ${Math.random()*80-40}px)`;
+
+    mensajeNo.style.display="block";
+    mensajeNo.innerText=frases[contador%frases.length];
+    contador++;
+}
+
+botonNo.addEventListener("mouseover", moverBoton);
+botonNo.addEventListener("touchstart", moverBoton);
+
+/* aceptar */
+botonSi.addEventListener("click",()=>{
+
+    document.querySelector(".tarjeta").classList.add("brillo");
+    lluviaFinal();
+
+    document.getElementById("pregunta").style.display="none";
+    botonNo.style.display="none";
+    botonSi.style.display="none";
+    mensajeNo.style.display="none";
+    document.querySelector(".nombre").style.display="none";
+
+    setTimeout(()=>{
+        document.getElementById("mensajeFinal").style.display="block";
+        escribirTexto("Te quiero ❤️");
+    },800);
+});
+
+
+/* corazones */
+setInterval(()=>{
+    const c=document.createElement("div");
+    c.className="corazon";
+    c.innerHTML="❤️";
+    c.style.left=Math.random()*100+"vw";
+    c.style.fontSize=(Math.random()*20+15)+"px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),6000);
+},400);
+
+/* lluvia intensa final */
+function lluviaFinal(){
+    for(let i=0;i<80;i++){
+        setTimeout(()=>{
+            const c=document.createElement("div");
+            c.innerHTML="❤️";
+            c.style.position="absolute";
+            c.style.left=Math.random()*100+"vw";
+            c.style.top="-20px";
+            c.style.fontSize=(Math.random()*25+20)+"px";
+            c.style.transition="transform 3s linear, opacity 3s";
+            document.body.appendChild(c);
+
+            setTimeout(()=>{
+                c.style.transform="translateY(110vh)";
+                c.style.opacity="0";
+            },50);
+
+            setTimeout(()=>c.remove(),3000);
+        },i*30);
+    }
+}
+
+function escribirTexto(texto){
+    const elemento = document.getElementById("teQuiero");
+    elemento.innerHTML="";
+    let i=0;
+
+    function escribir(){
+        if(i < texto.length){
+            elemento.innerHTML += texto.charAt(i);
+            i++;
+            setTimeout(escribir,90);
+        }
+    }
+    escribir();
+}
+
+/* activar música móvil */
+document.body.addEventListener("click",()=>{
+document.getElementById("musica").play();
+});
+</script>
+
+</body>
+</html>
